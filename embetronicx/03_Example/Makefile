@@ -1,4 +1,4 @@
-obj-m := 03_hello_world_module.o
+obj-m := 04_hello_world_module.o
 KDIR=/lib/modules/$(shell uname -r)/build
 
 all:
