@@ -1,1 +1,2 @@
 https://embetronicx.com/tutorials/linux/device-drivers/character-device-driver-major-number-and-minor-number/
+https://embetronicx.com/tutorials/linux/device-drivers/device-file-creation-for-character-drivers/
