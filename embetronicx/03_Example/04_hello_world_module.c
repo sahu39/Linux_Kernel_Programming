@@ -1,34 +1,36 @@
-/***********************Dynamic allocation of major and minor number**************************/
+/********Static allocation of Major & Minor  Number***********************/
 #include<linux/kernel.h>
 #include<linux/init.h>
 #include<linux/module.h>
-#include<linux/kdev_t.h>
 #include<linux/fs.h>
 #include<linux/types.h>
 
+/**************1st. dev_t structure variable*************************************/
 dev_t dev = 0;
+
+/**************2nd. Statically allocating the major and minor number*************/
 static int __init hello_world_init(void)
 {
-        /*****************Allocating major number*************************/
-        if(alloc_chrdev_region(&dev, 0,1, "Embetronicx_Device")<0)
-                {
-                            printk(KERN_INFO"Can not allocate Device Number for the Device\n");
-                                    return -1;
-                                        }
-            printk(KERN_INFO"Major Number:%d & Minor Number:%d\n",MAJOR(dev),MINOR(dev));
-                printk(KERN_INFO"Module Inserted successfully\n");
-                    return 0;
+    /*Allocating Major number*/
+            if((alloc_chrdev_region(&dev, 0, 1, "Embetronicx_Dev")) <0){
+                                printk(KERN_INFO "Cannot allocate major number for device 1\n");
+                                                return -1;
+                                                        }
+    //register_chrdev_region(dev, 1, "Embetronicx_Device");//allocating the user device in /proc/devices entry with major and minor number
+    printk(KERN_INFO"Major Number:%d & Minor Number:%d\n",MAJOR(dev),MINOR(dev));
+    printk(KERN_INFO"Kernel module inserted successfully.\n");
+    return 0;
 }
-
+/*************3rd. Deallocate the device while module is removed****************/
 void __exit hello_world_exit(void)
 {
-        unregister_chrdev_region(dev,1);
-            printk("Module Removed successfully & device deallocated\n");
+    unregister_chrdev_region(dev,1);
+    printk(KERN_INFO"Kernel module removed successfully and the device is deallocated.\n");
 }
 module_init(hello_world_init);
 module_exit(hello_world_exit);
 
-MODULE_AUTHOR("Sunil Kumar Sahu <mr.sahu39@gmail.com>");
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("Hello world driver with dynamically generating major and minor number\n");
-MODULE_VERSION("2:1.3");
+MODULE_DESCRIPTION("Hello world character driver with major and minor number creation statically.");
+MODULE_AUTHOR("Sunil Kumar Sahu <mr.sahu39@gmail.com>");
+MODULE_VERSION("2:1.2");
