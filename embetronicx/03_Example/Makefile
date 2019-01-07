@@ -1,5 +1,5 @@
-obj-m := 04_hello_world_module.o
-KDIR=/lib/modules/$(shell uname -r)/build
+obj-m := 05_hello_world_module.o
+KDIR=/lib/modules/$(shell uname -r)/build #uname -r = 3.13.0-62-generic
 
 all:
 	make -C ${KDIR} M=$(shell pwd) modules
