@@ -1,0 +1,194 @@
+1st:
+----
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# make
+make -C /lib/modules/3.13.0-62-generic/build  M=/home/rakesh/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example modules
+make[1]: Entering directory `/usr/src/linux-headers-3.13.0-62-generic'
+CC [M]  /home/rakesh/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example/mutex_driver_test.o
+Building modules, stage 2.
+MODPOST 1 modules
+CC      /home/rakesh/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example/mutex_driver_test.mod.o
+LD [M]  /home/rakesh/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example/mutex_driver_test.ko
+make[1]: Leaving directory `/usr/src/linux-headers-3.13.0-62-generic'
+          
+2nd:
+----
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# ls
+link.txt  modules.order   mutex_driver_test.c   mutex_driver_test.mod.c  mutex_driver_test.o
+Makefile  Module.symvers  mutex_driver_test.ko  mutex_driver_test.mod.o
+ 
+ 
+3rd:
+----
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# insmod mutex_driver_test.ko
+
+4th:
+-----
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# lsmod | grep -i mutex_driver_test
+mutex_driver_test      12976  0 
+
+5th:
+----
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# cat /proc/devices | grep -i my_proc_dev
+250 my_proc_dev
+
+6th:
+---
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# ls -l /dev/mutex_device 
+crw------- 1 root root 250, 0 Aug 19 14:15 /dev/mutex_device
+
+7th:
+-----
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# dmesg
+[ 8024.875623] Thread 1 created succesfully....
+[ 8024.877743] Thread 2 created succesfully....
+[ 8024.877745] Device Driver Insert Done......
+[ 8024.875633] my_global_variable=1......incremented 1 by thread_1
+[ 8024.877863] my_global_variable=3......incremented 2 by thread_2my_global_variable=4......incremented 1 by thread_1
+[ 8025.879360] my_global_variable=6......incremented 2 by thread_2my_global_variable=8......incremented 2 by thread_2
+[ 8026.883153] my_global_variable=9......incremented 1 by thread_1my_global_variable=10......incremented 1 by thread_1
+[ 8027.886924] my_global_variable=12......incremented 2 by thread_2my_global_variable=14......incremented 2 by thread_2
+[ 8028.890712] my_global_variable=15......incremented 1 by thread_1my_global_variable=16......incremented 1 by thread_1
+[ 8029.894486] my_global_variable=18......incremented 2 by thread_2my_global_variable=20......incremented 2 by thread_2
+[ 8030.898241] my_global_variable=21......incremented 1 by thread_1my_global_variable=22......incremented 1 by thread_1
+[ 8031.902018] my_global_variable=24......incremented 2 by thread_2my_global_variable=26......incremented 2 by thread_2
+[ 8032.905821] my_global_variable=27......incremented 1 by thread_1my_global_variable=29......incremented 2 by thread_2
+[ 8033.909605] my_global_variable=30......incremented 1 by thread_1my_global_variable=32......incremented 2 by thread_2
+[ 8034.913373] my_global_variable=33......incremented 1 by thread_1my_global_variable=34......incremented 1 by thread_1
+[ 8035.917147] my_global_variable=36......incremented 2 by thread_2my_global_variable=37......incremented 1 by thread_1
+[ 8036.920940] my_global_variable=39......incremented 2 by thread_2my_global_variable=41......incremented 2 by thread_2
+[ 8037.924703] my_global_variable=42......incremented 1 by thread_1my_global_variable=44......incremented 2 by thread_2
+[ 8038.928497] my_global_variable=45......incremented 1 by thread_1
+
+
+8th:
+-----
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# rmmod mutex_driver_test
+
+
+9th:
+---
+root@rakesh-desktop:~/Linux_module_programmes/Linux_Kernel_Programming/embetronicx/mutex_example# rmmod mutex_driver_test
+[ 8038.928497] my_global_variable=45......incremented 1 by thread_1my_global_variable=47......incremented 2 by thread_2
+[ 8039.932264] my_global_variable=48......incremented 1 by thread_1my_global_variable=49......incremented 1 by thread_1
+[ 8040.936040] my_global_variable=51......incremented 2 by thread_2my_global_variable=53......incremented 2 by thread_2
+[ 8041.939822] my_global_variable=54......incremented 1 by thread_1my_global_variable=55......incremented 1 by thread_1
+[ 8042.943589] my_global_variable=57......incremented 2 by thread_2my_global_variable=58......incremented 1 by thread_1
+[ 8043.947380] my_global_variable=60......incremented 2 by thread_2my_global_variable=62......incremented 2 by thread_2
+[ 8044.951157] my_global_variable=63......incremented 1 by thread_1my_global_variable=65......incremented 2 by thread_2
+[ 8045.954927] my_global_variable=66......incremented 1 by thread_1my_global_variable=67......incremented 1 by thread_1
+[ 8046.958730] my_global_variable=69......incremented 2 by thread_2my_global_variable=70......incremented 1 by thread_1
+[ 8047.962495] my_global_variable=72......incremented 2 by thread_2my_global_variable=74......incremented 2 by thread_2
+[ 8048.966280] my_global_variable=75......incremented 1 by thread_1my_global_variable=77......incremented 2 by thread_2
+[ 8049.970062] my_global_variable=78......incremented 1 by thread_1my_global_variable=80......incremented 2 by thread_2
+[ 8050.973824] my_global_variable=81......incremented 1 by thread_1my_global_variable=83......incremented 2 by thread_2
+[ 8051.977614] my_global_variable=84......incremented 1 by thread_1my_global_variable=85......incremented 1 by thread_1
+[ 8052.981397] my_global_variable=87......incremented 2 by thread_2my_global_variable=88......incremented 1 by thread_1
+[ 8053.985189] my_global_variable=90......incremented 2 by thread_2my_global_variable=91......incremented 1 by thread_1
+[ 8054.988951] my_global_variable=93......incremented 2 by thread_2my_global_variable=95......incremented 2 by thread_2
+[ 8055.992734] my_global_variable=96......incremented 1 by thread_1my_global_variable=98......incremented 2 by thread_2
+[ 8056.996484] my_global_variable=99......incremented 1 by thread_1my_global_variable=100......incremented 1 by thread_1
+[ 8058.000282] my_global_variable=102......incremented 2 by thread_2my_global_variable=104......incremented 2 by thread_2
+[ 8059.004058] my_global_variable=105......incremented 1 by thread_1my_global_variable=107......incremented 2 by thread_2
+[ 8060.007820] my_global_variable=108......incremented 1 by thread_1my_global_variable=109......incremented 1 by thread_1
+[ 8061.011630] my_global_variable=111......incremented 2 by thread_2my_global_variable=113......incremented 2 by thread_2
+[ 8062.015403] my_global_variable=114......incremented 1 by thread_1my_global_variable=115......incremented 1 by thread_1
+[ 8063.019173] my_global_variable=117......incremented 2 by thread_2my_global_variable=118......incremented 1 by thread_1
+[ 8064.022957] my_global_variable=120......incremented 2 by thread_2my_global_variable=121......incremented 1 by thread_1
+[ 8065.026741] my_global_variable=123......incremented 2 by thread_2my_global_variable=124......incremented 1 by thread_1
+[ 8066.030507] my_global_variable=126......incremented 2 by thread_2my_global_variable=127......incremented 1 by thread_1
+[ 8067.034291] my_global_variable=129......incremented 2 by thread_2my_global_variable=131......incremented 2 by thread_2
+[ 8068.038074] my_global_variable=132......incremented 1 by thread_1my_global_variable=134......incremented 2 by thread_2
+[ 8069.041846] my_global_variable=135......incremented 1 by thread_1my_global_variable=136......incremented 1 by thread_1
+[ 8070.045645] my_global_variable=138......incremented 2 by thread_2my_global_variable=139......incremented 1 by thread_1
+[ 8071.053380] my_global_variable=141......incremented 2 by thread_2my_global_variable=142......incremented 1 by thread_1
+[ 8072.057187] my_global_variable=144......incremented 2 by thread_2my_global_variable=145......incremented 1 by thread_1
+[ 8073.060940] my_global_variable=147......incremented 2 by thread_2my_global_variable=148......incremented 1 by thread_1
+[ 8074.064745] my_global_variable=150......incremented 2 by thread_2my_global_variable=151......incremented 1 by thread_1
+[ 8075.068510] my_global_variable=153......incremented 2 by thread_2my_global_variable=154......incremented 1 by thread_1
+[ 8076.072302] my_global_variable=156......incremented 2 by thread_2my_global_variable=157......incremented 1 by thread_1
+[ 8077.076079] my_global_variable=159......incremented 2 by thread_2my_global_variable=160......incremented 1 by thread_1
+[ 8078.079830] my_global_variable=162......incremented 2 by thread_2my_global_variable=163......incremented 1 by thread_1
+[ 8079.083650] my_global_variable=165......incremented 2 by thread_2my_global_variable=166......incremented 1 by thread_1
+[ 8080.087391] my_global_variable=168......incremented 2 by thread_2my_global_variable=169......incremented 1 by thread_1
+[ 8081.091175] my_global_variable=171......incremented 2 by thread_2my_global_variable=172......incremented 1 by thread_1
+[ 8082.094956] my_global_variable=174......incremented 2 by thread_2my_global_variable=175......incremented 1 by thread_1
+[ 8083.098759] my_global_variable=177......incremented 2 by thread_2my_global_variable=178......incremented 1 by thread_1
+[ 8084.102514] my_global_variable=180......incremented 2 by thread_2my_global_variable=181......incremented 1 by thread_1
+[ 8085.106291] my_global_variable=183......incremented 2 by thread_2my_global_variable=184......incremented 1 by thread_1
+[ 8086.110093] my_global_variable=186......incremented 2 by thread_2my_global_variable=187......incremented 1 by thread_1
+[ 8087.113869] my_global_variable=189......incremented 2 by thread_2my_global_variable=190......incremented 1 by thread_1
+[ 8088.117652] my_global_variable=192......incremented 2 by thread_2my_global_variable=193......incremented 1 by thread_1
+[ 8089.121403] my_global_variable=195......incremented 2 by thread_2my_global_variable=196......incremented 1 by thread_1
+[ 8090.125215] my_global_variable=198......incremented 2 by thread_2my_global_variable=199......incremented 1 by thread_1
+[ 8091.128996] my_global_variable=201......incremented 2 by thread_2my_global_variable=202......incremented 1 by thread_1
+[ 8092.132753] my_global_variable=204......incremented 2 by thread_2my_global_variable=205......incremented 1 by thread_1
+[ 8093.136520] my_global_variable=207......incremented 2 by thread_2my_global_variable=208......incremented 1 by thread_1
+[ 8094.140295] my_global_variable=210......incremented 2 by thread_2my_global_variable=211......incremented 1 by thread_1
+[ 8095.144074] my_global_variable=213......incremented 2 by thread_2my_global_variable=214......incremented 1 by thread_1
+[ 8096.147877] my_global_variable=216......incremented 2 by thread_2my_global_variable=217......incremented 1 by thread_1
+[ 8097.151659] my_global_variable=219......incremented 2 by thread_2my_global_variable=220......incremented 1 by thread_1
+[ 8098.155425] my_global_variable=222......incremented 2 by thread_2my_global_variable=223......incremented 1 by thread_1
+[ 8099.159217] my_global_variable=225......incremented 2 by thread_2my_global_variable=226......incremented 1 by thread_1
+[ 8100.162970] my_global_variable=228......incremented 2 by thread_2my_global_variable=229......incremented 1 by thread_1
+[ 8101.166747] my_global_variable=231......incremented 2 by thread_2my_global_variable=232......incremented 1 by thread_1
+[ 8102.170564] my_global_variable=234......incremented 2 by thread_2my_global_variable=235......incremented 1 by thread_1
+[ 8103.174304] my_global_variable=237......incremented 2 by thread_2my_global_variable=238......incremented 1 by thread_1
+[ 8104.178105] my_global_variable=240......incremented 2 by thread_2my_global_variable=241......incremented 1 by thread_1
+[ 8105.181885] my_global_variable=243......incremented 2 by thread_2my_global_variable=244......incremented 1 by thread_1
+[ 8106.185661] my_global_variable=246......incremented 2 by thread_2my_global_variable=247......incremented 1 by thread_1
+[ 8107.189423] my_global_variable=249......incremented 2 by thread_2my_global_variable=250......incremented 1 by thread_1
+[ 8108.193202] my_global_variable=252......incremented 2 by thread_2my_global_variable=253......incremented 1 by thread_1
+[ 8109.196980] my_global_variable=255......incremented 2 by thread_2my_global_variable=256......incremented 1 by thread_1
+[ 8110.200764] my_global_variable=258......incremented 2 by thread_2my_global_variable=259......incremented 1 by thread_1
+[ 8111.204567] my_global_variable=261......incremented 2 by thread_2my_global_variable=262......incremented 1 by thread_1
+[ 8112.208344] my_global_variable=264......incremented 2 by thread_2my_global_variable=265......incremented 1 by thread_1
+[ 8113.212122] my_global_variable=267......incremented 2 by thread_2my_global_variable=268......incremented 1 by thread_1
+[ 8114.215871] my_global_variable=270......incremented 2 by thread_2my_global_variable=271......incremented 1 by thread_1
+[ 8115.219669] my_global_variable=273......incremented 2 by thread_2my_global_variable=274......incremented 1 by thread_1
+[ 8116.223464] my_global_variable=276......incremented 2 by thread_2my_global_variable=277......incremented 1 by thread_1
+[ 8117.227240] my_global_variable=279......incremented 2 by thread_2my_global_variable=280......incremented 1 by thread_1
+[ 8118.231010] my_global_variable=282......incremented 2 by thread_2my_global_variable=283......incremented 1 by thread_1
+[ 8119.234764] my_global_variable=285......incremented 2 by thread_2my_global_variable=286......incremented 1 by thread_1
+[ 8120.238578] my_global_variable=288......incremented 2 by thread_2my_global_variable=289......incremented 1 by thread_1
+[ 8121.242324] my_global_variable=291......incremented 2 by thread_2my_global_variable=292......incremented 1 by thread_1
+[ 8122.246128] my_global_variable=294......incremented 2 by thread_2my_global_variable=295......incremented 1 by thread_1
+[ 8123.249878] my_global_variable=297......incremented 2 by thread_2my_global_variable=298......incremented 1 by thread_1
+[ 8124.253667] my_global_variable=300......incremented 2 by thread_2my_global_variable=301......incremented 1 by thread_1
+[ 8125.257465] my_global_variable=303......incremented 2 by thread_2my_global_variable=304......incremented 1 by thread_1
+[ 8126.261237] my_global_variable=306......incremented 2 by thread_2my_global_variable=307......incremented 1 by thread_1
+[ 8127.265022] my_global_variable=309......incremented 2 by thread_2my_global_variable=310......incremented 1 by thread_1
+[ 8128.268779] my_global_variable=312......incremented 2 by thread_2my_global_variable=313......incremented 1 by thread_1
+[ 8129.272575] my_global_variable=315......incremented 2 by thread_2my_global_variable=316......incremented 1 by thread_1
+[ 8130.276337] my_global_variable=318......incremented 2 by thread_2my_global_variable=319......incremented 1 by thread_1
+[ 8131.280226] my_global_variable=321......incremented 2 by thread_2my_global_variable=322......incremented 1 by thread_1
+[ 8132.283909] my_global_variable=324......incremented 2 by thread_2my_global_variable=325......incremented 1 by thread_1
+[ 8133.287667] my_global_variable=327......incremented 2 by thread_2my_global_variable=328......incremented 1 by thread_1
+[ 8134.291467] my_global_variable=330......incremented 2 by thread_2my_global_variable=331......incremented 1 by thread_1
+[ 8135.295258] my_global_variable=333......incremented 2 by thread_2my_global_variable=334......incremented 1 by thread_1
+[ 8136.299026] my_global_variable=336......incremented 2 by thread_2my_global_variable=337......incremented 1 by thread_1
+[ 8137.302780] my_global_variable=339......incremented 2 by thread_2my_global_variable=340......incremented 1 by thread_1
+[ 8138.306586] my_global_variable=342......incremented 2 by thread_2my_global_variable=343......incremented 1 by thread_1
+[ 8139.310375] my_global_variable=345......incremented 2 by thread_2my_global_variable=346......incremented 1 by thread_1
+[ 8140.314129] my_global_variable=348......incremented 2 by thread_2my_global_variable=349......incremented 1 by thread_1
+[ 8141.317909] my_global_variable=351......incremented 2 by thread_2my_global_variable=352......incremented 1 by thread_1
+[ 8142.321696] my_global_variable=354......incremented 2 by thread_2my_global_variable=355......incremented 1 by thread_1
+[ 8143.325466] my_global_variable=357......incremented 2 by thread_2my_global_variable=358......incremented 1 by thread_1
+[ 8144.329259] my_global_variable=360......incremented 2 by thread_2my_global_variable=361......incremented 1 by thread_1
+[ 8145.333038] my_global_variable=363......incremented 2 by thread_2my_global_variable=364......incremented 1 by thread_1
+[ 8146.336815] my_global_variable=366......incremented 2 by thread_2my_global_variable=367......incremented 1 by thread_1
+[ 8147.340597] my_global_variable=369......incremented 2 by thread_2my_global_variable=370......incremented 1 by thread_1
+[ 8148.344359] my_global_variable=372......incremented 2 by thread_2my_global_variable=373......incremented 1 by thread_1
+[ 8149.348149] my_global_variable=375......incremented 2 by thread_2my_global_variable=376......incremented 1 by thread_1
+[ 8150.351916] my_global_variable=378......incremented 2 by thread_2my_global_variable=379......incremented 1 by thread_1
+[ 8151.355714] my_global_variable=381......incremented 2 by thread_2my_global_variable=382......incremented 1 by thread_1
+[ 8152.359475] my_global_variable=384......incremented 2 by thread_2my_global_variable=385......incremented 1 by thread_1
+[ 8153.363264] my_global_variable=387......incremented 2 by thread_2my_global_variable=388......incremented 1 by thread_1
+[ 8154.367048] my_global_variable=390......incremented 2 by thread_2my_global_variable=391......incremented 1 by thread_1
+[ 8155.370837] my_global_variable=393......incremented 2 by thread_2my_global_variable=394......incremented 1 by thread_1
+[ 8156.374583] my_global_variable=396......incremented 2 by thread_2my_global_variable=397......incremented 1 by thread_1
+[ 8157.378365] my_global_variable=399......incremented 2 by thread_2my_global_variable=400......incremented 1 by thread_1
+[ 8158.382180] my_global_variable=402......incremented 2 by thread_2my_global_variable=403......incremented 1 by thread_1
+[ 8159.385938] my_global_variable=405......incremented 2 by thread_2<6>[ 8160.389903] Device Deriver Remove Done......
+
+
+
