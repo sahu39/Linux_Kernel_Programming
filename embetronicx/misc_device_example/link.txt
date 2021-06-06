@@ -1,0 +1,45 @@
+https://embetronicx.com/tutorials/linux/device-drivers/misc-device-driver/
+
+
+sunil@sunil-VirtualBox:~/Desktop/my_practice_projects/Linux_Kernel_Programming/embetronicx/misc_device_example$ ls -l /dev/simple*
+ls: cannot access /dev/simple*: No such file or directory
+
+sunil@sunil-VirtualBox:~/Desktop/my_practice_projects/Linux_Kernel_Programming/embetronicx/misc_device_example$ ls 
+link.txt  Makefile  misc_driver.c  misc_driver.ko  misc_driver.mod.c  misc_driver.mod.o  misc_driver.o  modules.order  Module.symvers
+
+sunil@sunil-VirtualBox:~/Desktop/my_practice_projects/Linux_Kernel_Programming/embetronicx/misc_device_example$ sudo insmod misc_driver.ko 
+sunil@sunil-VirtualBox:~/Desktop/my_practice_projects/Linux_Kernel_Programming/embetronicx/misc_device_example$ ls -l /dev/simple*
+crw------- 1 root root 10, 53 Jun  6 16:42 /dev/simple_etx_misc
+
+dmesg:
+-------
+[ 2224.511570] misc_register init done!!!
+
+
+root@sunil-VirtualBox:~/Desktop/my_practice_projects/Linux_Kernel_Programming/embetronicx/misc_device_example# echo 10 > /dev/simple_etx_misc 
+
+
+dmesg:
+------
+[ 2431.980900] my_misc_open:9
+[ 2431.980913] my_misc_write:22
+[ 2431.980917] my_misc_close:15
+
+
+
+
+root@sunil-VirtualBox:~/Desktop/my_practice_projects/Linux_Kernel_Programming/embetronicx/misc_device_example# cat /dev/simple_etx_misc 
+
+dmesg:
+--------
+[ 2634.464807] my_misc_open:9
+[ 2634.464818] my_misc_read:29
+[ 2634.464823] my_misc_close:15
+
+
+
+root@sunil-VirtualBox:~/Desktop/my_practice_projects/Linux_Kernel_Programming/embetronicx/misc_device_example# rmmod misc_driver
+dmesg:
+------
+[ 2840.778405] misc_register exit done1!!!
+
