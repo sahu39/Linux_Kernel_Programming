@@ -1,3 +1,7 @@
-token upto 1st January 2024:
------------------------------
+How to generate token in github for github http:
+-------------------------------------------------
+https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+
+token as github repo password when doing git clone,pull,push:
+------------------------------------------------------------------
 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
