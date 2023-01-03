@@ -1,0 +1,268 @@
+link:
+---------
+https://embetronicx.com/tutorials/linux/device-drivers/cdev-structure-and-file-operations-of-character-drivers/
+
+                                                     ubuntu  linux
+                                                     -------------
+compilation of kernel module:
+----------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ make
+make -C /lib/modules/5.4.0-135-generic/build  M=/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples modules
+make[1]: Entering directory '/usr/src/linux-headers-5.4.0-135-generic'
+  CC [M]  /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/07_hello_world_module.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/07_hello_world_module.mod.o
+  LD [M]  /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/07_hello_world_module.ko
+make[1]: Leaving directory '/usr/src/linux-headers-5.4.0-135-generic'
+
+compilation of user space code:
+------------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ gcc user_space.c -o user_space
+
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ ls
+07_hello_world_module.c   07_hello_world_module.mod    07_hello_world_module.mod.o  Makefile       Module.symvers  user_space
+07_hello_world_module.ko  07_hello_world_module.mod.c  07_hello_world_module.o      modules.order  notes.txt       user_space.c
+
+
+insmod:
+--------
+root@KernelMasters:/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples# insmod 07_hello_world_module.ko 
+
+root@KernelMasters:/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples# ls -l /dev/etx_device 
+crw------- 1 root root 240, 0 Jan  2 17:38 /dev/etx_device
+
+root@KernelMasters:/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples# lsmod | grep 07_
+07_hello_world_module    16384  0
+
+
+dmesg output after insmod:
+----------------------------
+[ 4886.947418] Major Number:240 & Minor Number:0
+[ 4886.947419] Kernel module inserted successfully.
+
+Running user space application to read,write to kernel space to user space and vice versa:
+------------------------------------------------------------------------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ sudo ./user_space 
+*********************************
+****Please Enter the Option******
+        1. Write               
+        2. Read                 
+        3. Exit                 
+*********************************
+2
+Your Option = 2
+Data Reading ...Done!
+
+Data = my_buffer
+
+****Please Enter the Option******
+        1. Write               
+        2. Read                 
+        3. Exit                 
+*********************************
+1
+Your Option = 1
+Enter the string to write into driver :my_user_data
+Data Writing ...Done!
+****Please Enter the Option******
+        1. Write               
+        2. Read                 
+        3. Exit                 
+*********************************
+3
+Your Option = 3
+
+dmesg output after running user space application:
+--------------------------------------------------
+[ 4622.131870] Major Number:240 & Minor Number:0
+[ 4622.131871] Kernel module inserted successfully.
+[ 4655.217091] Opening /dev/etx_device....
+[ 4663.531989] Reading from /dev/etx_device done......
+[ 4719.224381] Writting to /dev/etx_device done......
+[ 4719.224385] Modified kernel_buffer=my_user_data
+[ 4733.920999] Closing /dev/etx_device....
+
+
+Remove the  07_hello_world_module:
+-----------------------------------
+root@KernelMasters:/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/04_Examples# rmmod 07_hello_world_module
+
+
+dmesg output after removing:
+----------------------------------
+[ 5426.849815] Kernel module removed successfully and the device is deallocated.
+
+clean the module file:
+----------------------
+root@KernelMasters:/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/04_Examples# make clean
+make -C /lib/modules/5.4.0-135-generic/build  M=/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/04_Examples clean
+make[1]: Entering directory '/usr/src/linux-headers-5.4.0-135-generic'
+  CLEAN   /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/04_Examples/Module.symvers
+make[1]: Leaving directory '/usr/src/linux-headers-5.4.0-135-generic'
+
+
+
+							BeagleBone Black
+							----------------
+compilation for BBB on host x86 machine:
+-----------------------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C /home/km/KM_GITHUB/beagleboneblack-kernel M=/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples modules
+make[1]: Entering directory '/home/km/KM_GITHUB/beagleboneblack-kernel'
+  CC [M]  /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/07_hello_world_module.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/07_hello_world_module.mod.o
+  LD [M]  /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/07_hello_world_module.ko
+make[1]: Leaving directory '/home/km/KM_GITHUB/beagleboneblack-kernel'
+
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ ls
+07_hello_world_module.c   07_hello_world_module.mod.c    07_hello_world_module.mod.o  Makefile       Module.symvers  user_space
+07_hello_world_module.ko  07_hello_world_module.mod.dwo  07_hello_world_module.o      modules.order  notes.txt       user_space.c
+
+
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ file 07_hello_world_module.ko
+07_hello_world_module.ko: ELF 32-bit LSB relocatable, ARM, EABI5 version 1 (SYSV), BuildID[sha1]=127cbbf162706457d7955c9e029d18da7a029963, with debug_info, not stripped
+
+Cross cpmpiling the user_space.c file on X86 host:
+-------------------------------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ arm-linux-gnueabihf-gcc user_space.c -o user_space
+
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ file user_space
+user_space: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 3.2.0, with debug_info, not stripped
+
+Transfer the 06_hello_world_module.ko module file and user_space binary application to Beaglebone Black using scp:
+--------------------------------------------------------------------------------------------------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ scp 07_hello_world_module.ko km@192.168.7.2:~/
+Kernel Masters - BBB Debian GNU/Linux 10.4
+
+rcn-ee.net Debian Console Image 28th July 2022
+
+Support/FAQ: http://www.kernelmasters.org
+
+default username:password is [km:km]
+
+km@192.168.7.2's password: 
+07_hello_world_module.ko                                                                                                              100%   24KB   1.0MB/s   00:00    
+
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ scp user_space km@192.168.7.2:~/
+Kernel Masters - BBB Debian GNU/Linux 10.4
+
+rcn-ee.net Debian Console Image 28th July 2022
+
+Support/FAQ: http://www.kernelmasters.org
+
+default username:password is [km:km]
+
+km@192.168.7.2's password: 
+user_space                                                                                                                            100%   12KB 845.9KB/s   00:00   
+Check the file type in Beaglebone Black Terminal:
+-------------------------------------------------
+km@KM-BBB:~$ ls -l 07_hello_world_module.ko 
+-rw-r--r-- 1 km km 24664 Jul 22 05:40 06_hello_world_module.ko
+
+km@KM-BBB:~$ file 07_hello_world_module.ko 
+07_hello_world_module.ko: ELF 32-bit LSB relocatable, ARM, EABI5 version 1 (SYSV), BuildID[sha1]=9d04149acc0e512b5da53ece9805bf26b6c33900, with debug_info, not stripped
+
+
+root@KM-BBB:/home/km# file user_space 
+user_space: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, fonot stripped
+
+insmod in BeagleBoneBlack :
+---------------------------
+root@KM-BBB:/home/km# insmod 07_hello_world_module.ko
+
+root@KM-BBB:/home/km# ls -l /dev/etx_device 
+crw------- 1 root root 245, 0 Jul 22 05:43 /dev/etx_device
+
+demsg after insert:
+-------------------
+[ 1282.260902] 07_hello_world_module: loading out-of-tree module taints kernel.
+[ 1282.281371] Major Number:245 & Minor Number:0
+[ 1282.285792] Kernel module inserted successfully.
+
+lsmod:
+-----
+root@KM-BBB:/home/km# lsmod | grep 07_
+07_hello_world_module    16384  0
+
+Run user_space applicatio and verify the dmesg output:
+------------------------------------------------------
+km@KM-BBB:~$ sudo ./user_space 
+[sudo] password for km: 
+*********************************
+****Please Enter the Option******
+        1. Write               
+        2. Read                 
+        3. Exit                 
+*********************************
+2
+Your Option = 2
+Data Reading ...Done!
+
+Data = my_buffer
+
+
+dmesg output:
+-------------
+[ 1422.249306] Opening /dev/etx_device....
+[ 1430.421949] Reading from /dev/etx_device done......
+
+
+
+****Please Enter the Option******
+        1. Write               
+        2. Read                 
+        3. Exit                 
+*********************************
+1
+Your Option = 1
+Enter the string to write into driver :my_beagelebone_user_space
+
+dmesg output:
+------------
+[ 1571.140357] Writting to /dev/etx_device done......
+[ 1571.145224] Modified kernel_buffer=my_beagelebone_user_space
+
+
+
+
+Data Writing ...Done!
+****Please Enter the Option******
+        1. Write               
+        2. Read                 
+        3. Exit                 
+*********************************
+3
+Your Option = 3
+
+
+dmesg output:
+---------------
+[ 1678.168463] Closing /dev/etx_device....
+
+
+
+
+Remove 07_hello_world_module:
+----------------------------
+root@KM-BBB:/home/km# rmmod 07_hello_world_module
+
+dmesg after removing 07_hello_world_module:
+--------------------------------------------
+[  910.810921] Kernel module removed successfully and the device is deallocated.
+
+
+do make clean to remove the module file on host x86 machine:
+-----------------------------------------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- clean
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C /home/km/KM_GITHUB/beagleboneblack-kernel M=/home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples clean
+make[1]: Entering directory '/home/km/KM_GITHUB/beagleboneblack-kernel'
+  CLEAN   /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/.tmp_versions
+  CLEAN   /home/km/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples/Module.symvers
+make[1]: Leaving directory '/home/km/KM_GITHUB/beagleboneblack-kernel'
+
+
+
+
