@@ -1,0 +1,56 @@
+Makefile Template for both bbb and ubuntu linux:
+------------------------------------------------
+obj-m := 07_hello_world_module.o
+
+ifdef ARCH
+	KDIR=/home/km/KM_GITHUB/beagleboneblack-kernel
+else
+	KDIR=/lib/modules/$(shell uname -r)/build #uname -r = 5.4.0-135-generic
+endif
+
+all:
+ifdef ARCH
+	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C ${KDIR} M=$(shell pwd) modules
+else
+	make -C ${KDIR} M=$(shell pwd) modules
+endif
+
+clean:
+ifdef ARCH
+	make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- -C ${KDIR} M=$(shell pwd) clean
+else
+	make -C ${KDIR} M=$(shell pwd) clean
+endif
+
+
+To create modules for BBB run below command:
+--------------------------------------------
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+
+To clean modules for BBB run below command:
+--------------------------------------------
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf- clean
+
+To create modules for ubuntu linux:
+-----------------------------------
+make
+
+To clean modules for ubntu linux:
+---------------------------------
+make clean
+
+KM Beagele Bone Black kernel source code path view:
+---------------------------------------------------
+km@KernelMasters:~/KM_GITHUB/beagleboneblack-kernel$ ls
+1           certs    Documentation  gpio        ipc      km-bbb-kernel-build.sh    LICENSES     modules.builtin  null.dwo   samples   System.map           usr
+arch        COPYING  drivers        gpio-cmd.c  Kbuild   km-bbb-kernel-install.sh  MAINTAINERS  modules.order    out        scripts   tags                 virt
+block       CREDITS  firmware       include     Kconfig  lib                       Makefile     Module.symvers   README     security  ti_config_fragments  vmlinux
+built-in.a  crypto   fs             init        kernel   LICENSE                   mm           net              README.md  sound     tools                vmlinux.o
+
+
+ubuntu linux kernel source code path view:
+-------------------------------------------
+km@KernelMasters:~/Desktop/Sunil_Documents/Linux_Kernel_Programming/embetronicx/05_Examples$ ls /lib/modules/5.4.0-135-generic/build
+arch   certs   Documentation  fs       init  Kbuild   kernel  Makefile  Module.symvers  samples  security  tools   usr
+block  crypto  drivers        include  ipc   Kconfig  lib     mm        net             scripts  sound     ubuntu  virt
+
