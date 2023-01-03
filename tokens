@@ -2,6 +2,6 @@ How to generate token in github for github http:
 -------------------------------------------------
 https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
-token as github repo password when doing git clone,pull,push:
-------------------------------------------------------------------
-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
+token as github repo password when doing git clone,pull,push:(upto 3rd January 2024)
+--------------------------------------------------------------------------------------
+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
